@@ -1,0 +1,76 @@
+[NEW-FEATURE][]
+[ENHANCEMENT][]
+[BUGFIX][]
+[WORKAROUND][]
+[SPEC-CHANGE][]
+[DOCS][]
+[PATCH][]
+
+Description:
+	
+Root Cause:
+	N/A
+Solution:
+	N/A
+Issue ID:
+	N/A
+Merged From:
+	N/A
+Note:
+	N/A
+Reviewer:
+	N/A
+
+# Below is going to brief describing the log template, please have a look if you are not familiar with the log format
+# A proper log format will be much helpful in software maintanance and release tracking
+# It's strongly recommended to follow the log format
+#
+# [COMMIT-TYPE][TOPIC] Summary of this commit (MUST)
+#
+# Description: (MUST)
+#   Detail description of the problem which the commit is going to resolve
+#   For BUGFIX, describe the symptom and procedures to reproduce it
+#   For NEW-FEATURE/ENHANCEMENT/WORKAOUND, describe the motivation the commit tries to resolve and brief describing what it done
+#   For SPEC-CHANGE, describe WAS(what is was) and IS(what it is)
+#   For DOCS, describe what information engineers can obtain from the document
+# Root Cause: (OPTIONAL but MUST to BUGFIX)
+#   If this is a commit for fixing a bug, describe how/why it happened
+#   Otherwise, left it as "N/A"
+# Solution: (OPTIONAL but MUST when Root Cause filled)
+#   If Root Cause is filled, describe how to fixing it in both engineer's point of view
+#   It will be better to describe it in user's point of view if possible
+#   If Root Cause is "N/A", left it as "N/A" also
+# Issue ID: (MUST when the commit relates to an issue reported in tracking system)
+#   If this commit relates to an issue id in the issue tracking system(like JIRA),
+#   write down the issue id for tracking
+#   If this issue is not reported in tracking system, left it as “N/A”
+# Merged From: (OPTIONAL but MUST when this commit is merged from other topic branch)
+#   If this commit is merged from a commit in other topic branch, write down the commit id and the name of the topic branch
+#   Otherwise, left as "N/A"
+# Note: (OPTIONAL)
+#   Describing something needs to be awared after applying this patch like side effect or unexpected behavior
+#   Otherwise, left it as "N/A"
+#
+# =====
+# 
+# COMMIT-TYPE is used to describe which kind of patch to this commit. It could be one of below types
+# - NEW-FEATURE
+#    - Used for committing a new module/package/functionality
+# - ENHANCEMENT
+#    - Used for committing the improvement based on an already existed module/package
+# - BUGFIX
+#    - Used for committing the patch for fixing a bug which is reported in issue tracking system
+# - WORKAROUND
+#    - Used for committing incomplete/partial BUGFIX/ENHANCEMENT which may lead to side effect or limitation
+# - SPEC-CHANGE
+#    - Used for committing the patch due to internal/external Spec/Requirement change
+# - DOCS
+#    - Used for committing the documentation and not modifying any source code related to firmware release
+# - PATCH
+#    - Used for committing the patch which is from third-party
+#    - In this commit type, it's necessary to add the name of third-party at the end of Headline
+#    - Example: [PATCH][WiFi] Fix Jira#1111 (Foxconn)
+#
+# TOPIC is used to describe which module/feature this commit relates to. This field is not intending to be limited defined for flexibility
+# For exampple, it could be [WiFi], [GUI], [DHCP], ...etc. It's left for commiter's decistion
+#
