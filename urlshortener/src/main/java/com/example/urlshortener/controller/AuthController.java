@@ -11,66 +11,54 @@ import com.example.urlshortener.service.UserService;
 import com.example.urlshortener.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    
+
     @Autowired
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private UserService userService;
-    
-    @Autowired
-    private UserDetailsService userDetailsService;
-    
+
     @Autowired
     private JwtUtil jwtUtil;
-    
-    // 用戶註冊
+
+    // 註冊端點
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<RegistrationResponse> registerUser(@RequestBody RegistrationRequest registrationRequest) {
         try {
-            User registeredUser = userService.registerUser(user.getUsername(), user.getEmail(), user.getPassword());
-            return ResponseEntity.ok("用戶註冊成功");
+            User user = userService.registerUser(
+                registrationRequest.getUsername(),
+                registrationRequest.getPassword(),
+                registrationRequest.getEmail()
+            );
+            return ResponseEntity.ok(new RegistrationResponse("User registered successfully"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new RegistrationResponse(e.getMessage()));
         }
     }
-    
-    // 用戶登入
+
+    // 登入端點
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody User loginRequest) {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("用戶名或密碼錯誤");
+        } catch (Exception e) {
+            throw new Exception("Incorrect username or password", e);
         }
-        
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        
+
+        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
+        final String jwt = jwtUtil.generateToken(userDetails);
+
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
-    }
-    
-    // AuthenticationResponse 類別
-    public static class AuthenticationResponse {
-        private final String jwt;
-        
-        public AuthenticationResponse(String jwt) {
-            this.jwt = jwt;
-        }
-        
-        public String getJwt() {
-            return jwt;
-        }
     }
 }
 

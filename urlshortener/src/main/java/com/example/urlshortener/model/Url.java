@@ -10,33 +10,32 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "urls")
+@Table(name = "urls") // 明確指定表名
 public class Url {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 確保有 @Id 注解
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String originalUrl;
 
     @Column(nullable = false, unique = true)
     private String shortUrl;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @Column(nullable = false)
     private int clickCount = 0;
 
     private LocalDateTime lastAccessed;
 
-    private LocalDateTime expirationDate;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    // Constructors
+    // 無參構造函數
     public Url() {}
 
+    // 三參構造函數
     public Url(String originalUrl, String shortUrl, User user) {
         this.originalUrl = originalUrl;
         this.shortUrl = shortUrl;
@@ -44,57 +43,27 @@ public class Url {
     }
 
     // Getters 和 Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getOriginalUrl() { return originalUrl; }
+    public void setOriginalUrl(String originalUrl) { this.originalUrl = originalUrl; }
 
-    public String getOriginalUrl() {
-        return originalUrl;
-    }
+    public String getShortUrl() { return shortUrl; }
+    public void setShortUrl(String shortUrl) { this.shortUrl = shortUrl; }
 
-    public void setOriginalUrl(String originalUrl) {
-        this.originalUrl = originalUrl;
-    }
+    public int getClickCount() { return clickCount; }
+    public void setClickCount(int clickCount) { this.clickCount = clickCount; }
 
-    public String getShortUrl() {
-        return shortUrl;
-    }
+    public LocalDateTime getLastAccessed() { return lastAccessed; }
+    public void setLastAccessed(LocalDateTime lastAccessed) { this.lastAccessed = lastAccessed; }
 
-    public void setShortUrl(String shortUrl) {
-        this.shortUrl = shortUrl;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public int getClickCount() {
-        return clickCount;
-    }
-
+    // 新增的方法
     public void incrementClickCount() {
         this.clickCount++;
-    }
-
-    public LocalDateTime getLastAccessed() {
-        return lastAccessed;
-    }
-
-    public void setLastAccessed(LocalDateTime lastAccessed) {
-        this.lastAccessed = lastAccessed;
-    }
-
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
     }
 }
 
